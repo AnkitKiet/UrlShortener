@@ -1,6 +1,7 @@
 package app;
 
 
+import app.util.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class UrlController {
         return "Congratulations from UrlController.java";
     }
 
+    //Just a Demo route
     @GetMapping("/fetchurl")
     public List<Collections> fetchUrl(){
         Collections urlPojo=new Collections();
@@ -26,7 +28,6 @@ public class UrlController {
         urlPojo.setToken("quiwhs");
         urlPojo.setUrl("https://www.google.com");
         String tinyUrl="https://www.yourdomain.com/"+urlPojo.getToken();
-       // urlPojo.setTinyUrl(tinyUrl);
         List<Collections> urlPojoList = new ArrayList<>();
         urlPojoList.add(urlPojo);
         return urlPojoList;
@@ -38,14 +39,13 @@ public class UrlController {
     }
 
 
-    //Algorithm To Be Implemented
     @PostMapping("/generatetoken")
     public Collections create(@RequestBody Map<String, String> body){
+        TokenGenerator obj = new TokenGenerator();
         String url = body.get("url");
         Collections urlPojo=new Collections();
-        urlPojo.setToken("quiwhs");
         urlPojo.setUrl(url);
-        urlPojo.setToken("demo");
+        urlPojo.setToken(obj.generateToken(url));
         String tinyUrl="https://www.yourdomain.com/"+urlPojo.getToken();
         return urlRepository.save(urlPojo);
     }
